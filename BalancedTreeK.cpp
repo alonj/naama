@@ -302,8 +302,11 @@ const Value* BalancedTreeK::GetMaxValue(const Key *key1, const Key *key2) const{
             while (*(y->get_child(i)->get_key()) < *(key1) && y->get_child(i)->get_key() != NULL) {
                 i++;
             }
-            if(y->get_child(i)->sentinel){
+            if(y->get_child(i)->sentinel && i == 0){
                 i++;
+            }
+            if(y->get_child(i)->sentinel && i != 0){
+                i--;
             }
             y = y->get_child(i);
         }
