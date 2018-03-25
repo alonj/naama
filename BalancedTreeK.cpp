@@ -330,8 +330,10 @@ const Value* BalancedTreeK::GetMaxValue(const Key *key1, const Key *key2) const{
         }
         right = y;
     }
-
     delete zero_key;
+    if(*right->get_key() < *key1 || *key2 < *left->get_key()){
+        return NULL;
+    }
     Value* max = *left->get_value()<*right->get_value()?right->get_value():left->get_value();
     Node* x = left;
     Node* x_parent = x->get_parent();
@@ -355,8 +357,8 @@ const Value* BalancedTreeK::GetMaxValue(const Key *key1, const Key *key2) const{
         if(
             i < x_parent->direct_children &&
             !x_parent->get_child(i)->sentinel &&
-            *left->get_key() < *(x_parent->get_child(i)->get_key()) &&
-            *x_parent->get_child(i)->get_minKey() < *right->get_key() &&
+            *left->get_key() < *(x_parent->get_child(i)->get_minKey()) && // changed get_key to minkey
+            *x_parent->get_child(i)->get_key() < *right->get_key() && // changed minkey to key
             *max < *(x_parent->get_child(i)->get_value())
                 ){
             max = x_parent->get_child(i)->get_value();
@@ -410,21 +412,18 @@ void DFS(Node* current, Node* finished_arr[], int& time){
 
 BalancedTreeK::~BalancedTreeK() {
 //	Delete_BalanceTreek(_root);
-    Node* finished_arr[_root->total_children*K] = {NULL};
     int size_of_arr = _root->total_children;
     int log = size_of_arr;
     while(log != 0){
         log >>= 1;
         size_of_arr += log;
     }
+    Node* finished_arr[size_of_arr] = {NULL};
     int time = 0;
     DFS(_root, finished_arr, time);
     for(int i=0; i<time; i++){
         Node* node_dest = finished_arr[i];
         delete node_dest;
     }
-    _root = NULL;
-    minNode = NULL;
-    maxNode = NULL;
 }
 
