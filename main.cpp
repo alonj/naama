@@ -13,6 +13,7 @@
 #define OPERATIONS_SIZE 150
 #define VALUES_LENGTH 10
 #define SEED 22568
+//#define SEED 512
 
 #define NUM_OF_OPERATIONS 6
 #define INSERT 1
